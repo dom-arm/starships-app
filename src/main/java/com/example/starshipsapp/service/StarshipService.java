@@ -1,16 +1,14 @@
 package com.example.starshipsapp.service;
 
-import java.io.IOException;
-import java.io.InputStream;
+import java.util.Arrays;
+import java.util.List;
 
-import org.springframework.http.HttpRequest;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
+import com.example.starshipsapp.Result;
 import com.example.starshipsapp.Starship;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
 public class StarshipService {
@@ -21,24 +19,11 @@ public class StarshipService {
 		this.restClient = restClientBuilder.baseUrl("https://swapi.dev/api").build();
 	}
 
-	public Starship[] getStarships() {
-		Starship[] starships = restClient.get().uri("/starships").accept(MediaType.APPLICATION_JSON)
-				.exchange(StarshipService::exchangeToStarshipArray);
-		return starships;
+	public List<Starship> getStarships() {
+		Result result = restClient.get().uri("/starships").accept(MediaType.APPLICATION_JSON).retrieve()
+				.body(Result.class);
+		Starship[] starships = result.results();
+		return Arrays.asList(starships);
 	}
 
-	private static Starship[] exchangeToStarshipArray(HttpRequest request,
-			RestClient.RequestHeadersSpec.ConvertibleClientHttpResponse response) throws IOException {
-		if (response.getStatusCode().equals(HttpStatus.OK)) {
-			try {
-				InputStream body = response.getBody();
-				ObjectMapper objectMapper = new ObjectMapper();
-				return objectMapper.readValue(body, Starship[].class);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		return null;
-	}
 }
