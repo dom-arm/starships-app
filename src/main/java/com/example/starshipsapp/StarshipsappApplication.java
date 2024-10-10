@@ -7,7 +7,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
-import org.springframework.web.client.RestClient;
+
+import com.example.starshipsapp.service.StarshipService;
 
 @SpringBootApplication
 public class StarshipsappApplication {
@@ -18,18 +19,26 @@ public class StarshipsappApplication {
 		SpringApplication.run(StarshipsappApplication.class, args);
 	}
 
-	@Bean
-	public RestClient restClient(RestClient.Builder restClientBuilder) {
-		return restClientBuilder.baseUrl("https://swapi.dev/api").build();
-	}
+//	@Bean
+//	public RestClient restClient(RestClient.Builder restClientBuilder) {
+//		return restClientBuilder.baseUrl("https://swapi.dev/api").build();
+//	}
 
 	@Bean
 	@Profile("!test")
-	public CommandLineRunner run(RestClient restClient) throws Exception {
+	public CommandLineRunner run(StarshipService starshipService) throws Exception {
 		return args -> {
-			Starship starship = restClient.get().uri("/starships/3").retrieve().body(Starship.class);
-			log.info(starship.toString());
+			Starship[] starships = starshipService.getStarships();
+			log.info(starships.toString());
 		};
 	}
+//	@Bean
+//	@Profile("!test")
+//	public CommandLineRunner run(RestClient restClient) throws Exception {
+//		return args -> {
+//			Starship starship = restClient.get().uri("/starships").retrieve().body(Starship.class);
+//			log.info(starship.toString());
+//		};
+//	}
 
 }
