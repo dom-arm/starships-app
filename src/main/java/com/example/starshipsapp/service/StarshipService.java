@@ -1,5 +1,6 @@
 package com.example.starshipsapp.service;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -20,10 +21,24 @@ public class StarshipService {
 	}
 
 	public List<Starship> getStarships() {
-		Result result = restClient.get().uri("/starships").accept(MediaType.APPLICATION_JSON).retrieve()
-				.body(Result.class);
-		Starship[] starships = result.results();
-		return Arrays.asList(starships);
+		// The response may be paginated so I have to check for the next hyperlink
+
+		String uri = "/starships";
+		List<Starship> starships = new ArrayList<>();
+
+		while (uri != null) {
+			Result result = restClient.get().uri(uri).accept(MediaType.APPLICATION_JSON).retrieve().body(Result.class);
+			Starship[] starshipsOnCurrentPage = result.results();
+
+			starships.addAll(Arrays.asList(starshipsOnCurrentPage));
+			uri = result.next();
+		}
+
+		// TODO can compare the count field of the Result with the length of starships
+		// to confirm all starships is fetched
+
+		return starships;
+
 	}
 
 }
