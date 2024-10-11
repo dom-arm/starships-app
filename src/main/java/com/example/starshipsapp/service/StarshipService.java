@@ -23,8 +23,12 @@ public class StarshipService {
 
 		switch (sort) {
 		case "price":
+
 			List<Starship> sorted = sortByPrice(order);
+
+			// The top 10 starships in the sorted list should be returned
 			return sorted.size() > 10 ? sorted.subList(0, 10) : sorted;
+
 		default:
 			throw new Exception("Sorting on " + sort + " parameter not yet implemented");
 		}
@@ -49,11 +53,11 @@ public class StarshipService {
 			String price2 = second.cost_in_credits();
 
 			if (price1.equals("unknown"))
-				return 1;
+				return 1; // Move first after second
 			if (price2.equals("unknown"))
-				return -1;
+				return -1; // Keep second after first
 
-			// desc
+			// Descending
 			return Long.compare(Long.parseLong(price2), Long.parseLong(price1));
 		});
 

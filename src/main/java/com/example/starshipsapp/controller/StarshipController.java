@@ -14,11 +14,9 @@ import com.example.starshipsapp.service.StarshipService;
 public class StarshipController {
 
 	private final StarshipService starshipService;
-//	private final ExternalDataService externalDataService;
 
 	public StarshipController(StarshipService starshipService) {
 		this.starshipService = starshipService;
-//		this.externalDataService = externalDataService;
 	}
 
 	@GetMapping("/starships")

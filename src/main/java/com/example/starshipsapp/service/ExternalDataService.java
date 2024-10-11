@@ -24,8 +24,8 @@ public class ExternalDataService {
 	}
 
 	public List<Starship> fetchData() {
-		// The response may be paginated so I have to check for the next hyperlink
 
+		// The response may be paginated so I have to check for the next hyperlink
 		String uri = ROOT_RESOURCE;
 		List<Starship> data = new ArrayList<>();
 
@@ -36,9 +36,6 @@ public class ExternalDataService {
 			data.addAll(Arrays.asList(recordsOnCurrentPage));
 			uri = result.next();
 		}
-
-		// TODO can compare the count field of the Result with the length of starships
-		// to confirm all starships is fetched
 
 		return data;
 
