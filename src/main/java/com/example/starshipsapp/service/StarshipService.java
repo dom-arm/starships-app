@@ -19,30 +19,25 @@ public class StarshipService {
 		return this.data;
 	}
 
-	public List<Starship> sortBy(String sort, String order) {
+	public List<Starship> sortBy(String sort, String order) throws Exception {
 
 		switch (sort) {
 		case "price":
 			List<Starship> sorted = sortByPrice(order);
 			return sorted.size() > 10 ? sorted.subList(0, 10) : sorted;
 		default:
-			// Throw not sorting on this yet
-			return null;
+			throw new Exception("Sorting on " + sort + " parameter not yet implemented");
 		}
 
 	}
 
-	private List<Starship> sortByPrice(String order) {
+	private List<Starship> sortByPrice(String order) throws Exception {
 
 		switch (order) {
 		case "desc":
 			return sortInDescendingOrder(this.getData());
-		case "asc":
-			// Nothing implemented yet
-			return null;
 		default:
-			// Not ordering on this
-			return null;
+			throw new Exception("Ordering on " + order + " parameter not yet implemented");
 		}
 
 	}
